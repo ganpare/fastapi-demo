@@ -37,6 +37,8 @@ services:
       - PGADMIN_DEFAULT_EMAIL=admin@example.com
       - PGADMIN_DEFAULT_PASSWORD=admin
       - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_ENCRYPTION_KEY="my_secret_encryption_key"
+      - PGADMIN_CONFIG_TIMEOUT=60
     ports:
       - "5050:80"
     depends_on:

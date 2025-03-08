@@ -1,134 +1,50 @@
-# FastAPIデモアプリケーション - タスク管理
+# FastAPI Demo
 
-このプロジェクトは、FastAPIの基本的な機能を理解するためのシンプルなタスク管理アプリケーションです。
+このリポジトリは、FastAPIを使ったデモプロジェクトです。以下に概要、セットアップ手順、及び使用方法を記載します。
 
-## 機能概要
+## 概要
 
-- タスクの追加、表示、削除ができるシンプルなWebアプリケーション
-- RESTful APIとWebインターフェースの両方を提供
-- リアルタイムな更新（フロントエンドのJavaScriptによる）
+- FastAPI、Docker、PostgreSQL、pgAdminを利用したWebアプリケーションのデモです。
+- <code>docker-compose.yml</code> により、アプリケーション（web）、データベース（db）、pgAdminサービスが構成されています。
+- pgAdminは、[http://localhost:5050](http://localhost:5050) からアクセス可能です。
 
-## 技術スタック
+## セットアップ
 
-- **バックエンド**
-  - FastAPI (Pythonウェブフレームワーク)
-  - Uvicorn (ASGIサーバー)
-  - Jinja2 (テンプレートエンジン)
+1. Dockerおよびdocker-composeをインストールしてください。
+2. リポジトリをクローンまたはダウンロードし、<code>fastapi-demo</code>ディレクトリに移動します。
+3. 以下のコマンドを実行して、コンテナをビルド・起動します。
 
-- **フロントエンド**
-  - HTML/CSS
-  - JavaScript (Vanilla JS)
-
-## プロジェクト構造
-
-```
-fastapi-demo/
-├── main.py              # メインアプリケーションファイル
-├── templates/           # HTMLテンプレート
-│   └── index.html      # メインページ
-├── static/             # 静的ファイル（CSS、JS等）
-└── venv/              # Python仮想環境
-```
-
-## APIエンドポイント
-
-| エンドポイント | メソッド | 説明 |
-|--------------|---------|------|
-| `/` | GET | メインページを表示 |
-| `/tasks` | POST | 新しいタスクを追加 |
-| `/api/tasks` | GET | タスク一覧を取得 |
-| `/tasks/{task_id}` | DELETE | 特定のタスクを削除 |
-
-## セットアップ手順
-
-1. Python仮想環境の作成と有効化：
-```bash
-python3 -m venv venv
-source venv/bin/activate  # Linuxまたは macOS
-# または
-.\venv\Scripts\activate  # Windows
-```
-
-2. 依存パッケージのインストール：
-```bash
-pip install fastapi uvicorn jinja2 python-multipart
-```
-
-3. アプリケーションの起動：
-```bash
-uvicorn main:app --reload
-```
+   ```
+   docker-compose up --build -d
+   ```
 
 ## 使用方法
 
-1. ブラウザで http://127.0.0.1:8000 にアクセス
-2. タスク入力フォームにタスクを入力して「追加」をクリック
-3. タスク一覧から各タスクの削除が可能
+- **Web サービス**: [http://localhost:8000](http://localhost:8000) でアプリケーションが稼働します。
+- **pgAdmin**: [http://localhost:5050](http://localhost:5050) でデータベース管理ツールにアクセスできます。
+  - pgAdminのデフォルトログイン情報:
+    - Email: admin@example.com
+    - Password: admin
+- **PostgreSQL**: 使用しているデータベースは<code>postgres:14</code>イメージにより構築されています。接続情報は<code>docker-compose.yml</code>にて設定されています。
 
-## API ドキュメント
+## 更新内容
 
-FastAPIは自動的にAPIドキュメントを生成します：
+- pgAdminの設定を更新し、<code>PGADMIN_CONFIG_ENCRYPTION_KEY</code>および<code>PGADMIN_CONFIG_TIMEOUT</code>を適切に設定しました。
+- Dockerコンテナを使って、プロジェクト全体を自動ビルド・起動できる環境が整いました。
+- GitHubのリモートリポジトリが作成され、内容が最新の状態でプッシュされています。
 
-- Swagger UI: http://127.0.0.1:8000/docs
-- ReDoc: http://127.0.0.1:8000/redoc
+## リモートリポジトリ
 
-## 実装の特徴
+リモートリポジトリはGitHubに作成され、プロジェクトの最新の内容が反映されています。
 
-### バックエンド（main.py）
+## トラブルシューティング
 
-- **FastAPI** を使用した非同期APIの実装
-- **Jinja2** テンプレートエンジンによるHTMLレンダリング
-- インメモリデータストア（実際のアプリケーションではデータベースを使用）
-- フォームデータの処理
-- 静的ファイルの提供
+問題が発生した場合は、各Dockerサービスのログを確認してください。必要に応じて、以下のコマンドでコンテナの再構築・再起動を行ってください。
 
-### フロントエンド（index.html）
+   ```
+   docker-compose down && docker-compose up --build -d
+   ```
 
-- レスポンシブなデザイン
-- 非同期JavaScriptによるAPIとの通信
-- フォームのバリデーション
-- 動的なUIの更新
+## ライセンス
 
-## 学習ポイント
-
-1. **FastAPIの基本機能**
-   - ルーティング
-   - パスパラメータ
-   - フォームデータの処理
-   - 静的ファイルの提供
-   - テンプレートエンジンの統合
-
-2. **非同期処理**
-   - async/awaitを使用した非同期関数の実装
-   - 非同期APIエンドポイント
-
-3. **フロントエンド統合**
-   - APIとフロントエンドの連携
-   - 非同期JavaScriptによるデータ取得と更新
-
-4. **APIドキュメント**
-   - OpenAPI（Swagger）の自動生成
-   - APIエンドポイントの自動ドキュメント化
-
-## 発展的な改善案
-
-1. **データ永続化**
-   - データベース（SQLAlchemyなど）の導入
-   - モデルの定義とマイグレーション
-
-2. **認証・認可**
-   - ユーザー認証の追加
-   - JWTトークンの実装
-
-3. **機能拡張**
-   - タスクの優先順位付け
-   - 締め切り日の設定
-   - タスクのカテゴリ分け
-
-4. **フロントエンド改善**
-   - モダンなUIフレームワーク（React、Vueなど）の導入
-   - よりリッチなユーザー体験の提供
-
-## まとめ
-
-このデモアプリケーションは、FastAPIの主要な機能を理解するための入門として最適です。シンプルながら、実際のWebアプリケーション開発で必要となる要素を含んでおり、FastAPIの特徴である高速性、型の安全性、自動ドキュメント生成などを体験できます。
+このプロジェクトはMITライセンスのもとで公開されています.
